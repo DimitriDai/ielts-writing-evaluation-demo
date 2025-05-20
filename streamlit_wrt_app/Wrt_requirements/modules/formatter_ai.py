@@ -31,11 +31,17 @@ def guess_task_type(text: str) -> Literal["Task 1", "Task 2"]:
     return "Task 2"
 
 def get_feedback_from_deepseek(text: str, api_key: str, task_type="Task 2") -> str:
-    headers = {
-        "Authorization": f"Bearer {api_key or DEEPSEEK_API_KEY}",
-        "Content-Type": "application/json"
-    }
+    import streamlit as st  # 仅在 streamlit 环境下有效
 
+    # 内容合法性预检查
+    if not text or len(text.strip()) < 30:
+        st.warning("❗ 作文内容太短，无法生成有效反馈。")
+        st.stop()
+    if len(text) > 3000:
+        st.warning("❗ 作文内容过长，建议限制在 2500 字以内。")
+        st.stop()
+
+    # 构造 Prompt
     full_prompt = f"""你是一位雅思写作考官，请你根据下列规则对学生的作文进行逐句反馈与优化：
 1. 逐句指出每一句中是否存在语法、拼写、词汇、搭配、表达不自然等错误。
 2. 对有问题的句子，逐句给出修正后的句子，但不改变原句的表达内容。
@@ -50,15 +56,31 @@ def get_feedback_from_deepseek(text: str, api_key: str, task_type="Task 2") -> s
 请按以上格式处理以下学生作文（类型为 {task_type}）：
 {text.strip()}
 """
+
+    # 打印调试信息（仅用于开发时）
+    st.code(full_prompt[:500], language="markdown")
+    st.write("Prompt 长度：", len(full_prompt))
+
+    # API 请求
+    url = "https://api.deepseek.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key or DEEPSEEK_API_KEY}",
+        "Content-Type": "application/json"
+    }
     payload = {
         "model": "deepseek-chat",
         "messages": [{"role": "user", "content": full_prompt}],
         "temperature": 0.3
     }
 
-    url = "https://api.deepseek.com/v1/chat/completions"
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        st.error("❌ DeepSeek API 请求失败")
+        st.code(response.text, language="json")
+        raise e
+
     return response.json()["choices"][0]["message"]["content"]
 
 def clean_feedback_text(text: str) -> str:
