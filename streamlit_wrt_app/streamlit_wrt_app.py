@@ -3,6 +3,7 @@ import streamlit as st
 import os
 import sys
 import json
+import docx
 from datetime import datetime
 from io import BytesIO
 
