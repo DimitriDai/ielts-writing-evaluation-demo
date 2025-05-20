@@ -1,0 +1,95 @@
+{
+  "addition": [
+    "in addition",
+    "additionally",
+    "furthermore",
+    "moreover",
+    "also",
+    "not only … but also",
+    "as well as",
+    "and"
+  ],
+  "example": [
+    "for example",
+    "for instance",
+    "such as",
+    "to illustrate",
+    "namely",
+    "in other words"
+  ],
+  "contrast": [
+    "however",
+    "nevertheless",
+    "on the other hand",
+    "although",
+    "even though",
+    "despite",
+    "in spite of",
+    "whereas",
+    "while",
+    "by contrast",
+    "alternatively"
+  ],
+  "cause_effect": [
+    "because",
+    "since",
+    "as",
+    "due to",
+    "owing to",
+    "therefore",
+    "thus",
+    "hence",
+    "consequently",
+    "as a result"
+  ],
+  "emphasis": [
+    "particularly",
+    "in particular",
+    "especially",
+    "obviously",
+    "of course",
+    "clearly",
+    "indeed"
+  ],
+  "sequence": [
+    "firstly",
+    "secondly",
+    "thirdly",
+    "then",
+    "next",
+    "after that",
+    "finally",
+    "lastly",
+    "eventually",
+    "meanwhile"
+  ],
+  "conclusion": [
+    "in conclusion",
+    "to sum up",
+    "to conclude",
+    "overall",
+    "in summary",
+    "all in all",
+    "ultimately"
+  ],
+  "opinion": [
+    "in my opinion",
+    "I believe",
+    "I think",
+    "I admit",
+    "in my view",
+    "I concur",
+    "I disagree"
+  ],
+  "condition": [
+    "if",
+    "unless",
+    "provided that",
+    "in case",
+    "as long as"
+  ],
+  "clarification": [
+    "that is to say",
+    "to put it another way"
+  ]
+}

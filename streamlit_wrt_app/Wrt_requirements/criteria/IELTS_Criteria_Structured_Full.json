@@ -1,0 +1,174 @@
+{
+  "Task2": {
+    "Task Response": {
+      "description": "Evaluates whether the essay fully addresses all parts of the task and presents a clear, well-developed position.",
+      "bands": {
+        "9": "Fully addresses all parts of the task with depth and insight. Clear, well-supported position.",
+        "8": "Covers all parts of the task. Presents a well-developed position with relevant support.",
+        "7": "Addresses all parts. Position is clear though support may lack focus or depth.",
+        "6": "Addresses the main parts, but may be unclear or insufficiently developed.",
+        "5": "Responds only partially to the task. Position may be unclear or ideas underdeveloped."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "word_count_min": 250,
+          "missing_parts": true,
+          "has_position": true
+        },
+        "penalties": {
+          "underlength": 5.5,
+          "missing_parts": 5.0,
+          "no_position": 5.5
+        }
+      }
+    },
+    "Coherence and Cohesion": {
+      "description": "Assesses logical organization, clear paragraphing, and effective use of linking devices.",
+      "bands": {
+        "9": "Ideas are logically sequenced. Cohesion is seamless. Paragraphing is well managed.",
+        "8": "Information is logically organized. Cohesion and paragraphing are strong.",
+        "7": "Clear progression. Minor issues in cohesion or over/underuse of linkers.",
+        "6": "Generally coherent. Cohesion may be faulty or mechanical.",
+        "5": "Lacks logical sequencing. Paragraphing or cohesion may be poor or inconsistent."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "paragraph_count_min": 4,
+          "cohesive_devices_min": 6,
+          "linker_types_min": 3
+        },
+        "penalties": {
+          "low_paragraph_count": 6.0,
+          "few_linkers": 6.0,
+          "repetitive_linkers": 5.5
+        }
+      }
+    },
+    "Lexical Resource": {
+      "description": "Evaluates vocabulary range, appropriacy, accuracy, and spelling.",
+      "bands": {
+        "9": "Wide range, natural and precise use of words. Rare errors.",
+        "8": "Flexible use of vocabulary. Few inaccuracies.",
+        "7": "Good range. Some awkward or imprecise usage.",
+        "6": "Sufficient range. Repetition and inaccuracies present.",
+        "5": "Limited vocabulary. Errors affect meaning."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "type_token_ratio_min": 0.4,
+          "high_freq_ratio_max": 0.3,
+          "spelling_errors_max": 6
+        },
+        "penalties": {
+          "low_diversity": 6.0,
+          "high_repetition": 6.0,
+          "too_many_spelling_errors": 5.5
+        }
+      }
+    },
+    "Grammatical Range and Accuracy": {
+      "description": "Assesses sentence structure variety and grammatical accuracy.",
+      "bands": {
+        "9": "Wide range of complex structures. Rare errors.",
+        "8": "Flexible and accurate use of grammar. Mostly error-free.",
+        "7": "Varied sentence forms. Frequent accuracy.",
+        "6": "Mix of simple/complex forms. Errors present but meaning retained.",
+        "5": "Limited range. Frequent errors affect understanding."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "complex_sentence_ratio_min": 0.35,
+          "grammar_error_rate_max": 0.12,
+          "simple_sentence_ratio_max": 0.7
+        },
+        "penalties": {
+          "low_complexity": 6.0,
+          "high_error_rate": 5.5,
+          "monotonous_structures": 5.5
+        }
+      }
+    }
+  },
+  "Task1": {
+    "Task Achievement": {
+      "description": "Assesses how well the response fulfills the requirements of the task, including summarizing, selecting, and comparing key features of visual input (AC) or fulfilling communicative purpose (GT).",
+      "bands": {
+        "9": "Fully satisfies all task requirements. Key features are clearly and accurately presented and highlighted.",
+        "8": "Covers all requirements appropriately. Key features are well presented, with minor omissions.",
+        "7": "Covers the requirements. Key features are presented, though may lack clarity or detail.",
+        "6": "Addresses the task, but may miss or inadequately present key features.",
+        "5": "Generally addresses task but data description may be inaccurate or missing key trends."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "word_count_min": 150,
+          "missing_key_features": true
+        },
+        "penalties": {
+          "underlength": 5.5,
+          "missing_features": 5.0
+        }
+      }
+    },
+    "Coherence and Cohesion": {
+      "description": "Assesses the logical organization of information, clarity of comparisons, and appropriate use of cohesive devices and paragraphing.",
+      "bands": {
+        "9": "Information is logically organized; cohesion is seamless and paragraphing is well managed.",
+        "8": "Information and ideas are logically sequenced; cohesion is well managed.",
+        "7": "Clear progression of ideas; some lapses in cohesion or paragraphing.",
+        "6": "Overall coherence is evident but may be faulty or mechanical in places.",
+        "5": "Lacks logical organization or appropriate paragraphing."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "paragraph_count_min": 3,
+          "cohesive_devices_min": 5
+        },
+        "penalties": {
+          "low_paragraph_count": 6.0,
+          "few_linkers": 6.0
+        }
+      }
+    },
+    "Lexical Resource": {
+      "description": "Assesses range and accuracy of vocabulary, ability to paraphrase and use topic-specific language.",
+      "bands": {
+        "9": "Wide range of vocabulary used with precision. Rare errors.",
+        "8": "Flexible and precise use of language with few inaccuracies.",
+        "7": "Good range of vocabulary with some errors in word choice or spelling.",
+        "6": "Sufficient range but with repetition or errors in expression.",
+        "5": "Limited vocabulary; errors may affect meaning."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "type_token_ratio_min": 0.38,
+          "spelling_errors_max": 5
+        },
+        "penalties": {
+          "low_diversity": 6.0,
+          "too_many_spelling_errors": 5.5
+        }
+      }
+    },
+    "Grammatical Range and Accuracy": {
+      "description": "Assesses variety and correctness of grammatical structures and punctuation.",
+      "bands": {
+        "9": "Wide range of sentence structures with rare minor errors.",
+        "8": "Flexible and accurate grammar use. Most sentences error-free.",
+        "7": "Varied sentence forms. Some grammatical or punctuation errors.",
+        "6": "Mix of simple and complex forms. Errors may be noticeable but meaning is clear.",
+        "5": "Limited range of sentence structures. Frequent errors may affect understanding."
+      },
+      "quant_rules": {
+        "thresholds": {
+          "complex_sentence_ratio_min": 0.3,
+          "grammar_error_rate_max": 0.15
+        },
+        "penalties": {
+          "low_complexity": 6.0,
+          "high_error_rate": 5.5
+        }
+      }
+    }
+  }
+}
