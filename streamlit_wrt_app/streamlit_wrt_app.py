@@ -1,9 +1,11 @@
-
 import streamlit as st
 import os
 import sys
 import json
 import docx
+import re
+import pandas as pd
+from docx import Document
 from datetime import datetime
 from io import BytesIO
 
@@ -36,51 +38,55 @@ scoring_df = load_scoring_matrix(os.path.join(criteria_path, "scoring_matrix.xls
 st.set_page_config(page_title="雅思作文评分系统", layout="centered")
 st.title("📄 雅思作文自动评分与反馈生成")
 
-uploaded_file = st.file_uploader("请上传作文文件（支持 .txt 或 .docx）", type=["txt", "docx"])
+uploaded_files = st.file_uploader(
+    "请上传一篇或多篇作文文件（支持 .txt 或 .docx）", 
+    type=["txt", "docx"], 
+    accept_multiple_files=True
+)
 
-if uploaded_file:
-    file_bytes = uploaded_file.read()
-    suffix = uploaded_file.name.split(".")[-1]
+if uploaded_files:
+    st.info(f"共上传 {len(uploaded_files)} 篇作文。请逐一处理并下载👇")
 
-    if suffix == "txt":
-        text = file_bytes.decode("utf-8")
-    else:
-        from docx import Document
-        doc = Document(BytesIO(file_bytes))
-        text = "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
+    for idx, uploaded_file in enumerate(uploaded_files):
+        with st.expander(f"📄 作文 {idx+1}：{uploaded_file.name}", expanded=False):
+            file_bytes = uploaded_file.read()
+            suffix = uploaded_file.name.split(".")[-1]
 
-    st.success("✅ 作文内容读取成功。")
-    st.text_area("✍️ 作文内容预览", value=text, height=300)
+            if suffix == "txt":
+                text = file_bytes.decode("utf-8")
+            else:
+                doc = Document(BytesIO(file_bytes))
+                text = "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
 
-    if st.button("🚀 开始评分与反馈生成"):
-        with st.spinner("正在分析评分与生成反馈报告，请稍候..."):
-            task_type = guess_task_type(text)
-            basic = basic_stats(text)
-            word_list = basic["word_list"]
-            vocab = analyze_vocab_levels(word_list, ox3000, c1c2)
-            coherence = analyze_coherence(text, linking_dict)
-            metrics = {
-                **basic,
-                **vocab,
-                **coherence,
-                "has_position": "i think" in text.lower() or "i believe" in text.lower()
-            }
+            st.text_area("✍️ 作文内容预览", value=text, height=200, key=f"preview_{idx}")
 
-            band_scores = evaluate_band_scores(metrics, scoring_df)
+            if st.button(f"🚀 开始评分：{uploaded_file.name}", key=f"process_{idx}"):
+                with st.spinner("正在生成反馈，请稍候..."):
+                    task_type = guess_task_type(text)
+                    basic = basic_stats(text)
+                    word_list = basic["word_list"]
+                    vocab = analyze_vocab_levels(word_list, ox3000, c1c2)
+                    coherence = analyze_coherence(text, linking_dict)
+                    metrics = {
+                        **basic,
+                        **vocab,
+                        **coherence,
+                        "has_position": "i think" in text.lower() or "i believe" in text.lower()
+                    }
 
-            # DeepSeek API Key from st.secrets
-            DEEPSEEK_API_KEY = st.secrets["DEEPSEEK_API_KEY"]
-            feedback_text = get_feedback_from_deepseek(text, DEEPSEEK_API_KEY, task_type=task_type)
+                    band_scores = evaluate_band_scores(metrics, scoring_df)
 
-            # 输出文件流（不写硬盘）
-            output_doc = BytesIO()
-            save_feedback_to_docx(feedback_text, output_doc, task_type, band_scores)
-            output_doc.seek(0)
+                    feedback_text = get_feedback_from_deepseek(text, st.secrets["DEEPSEEK_API_KEY"], task_type=task_type)
 
-            now = datetime.now().strftime("%Y%m%d_%H%M")
-            filename = f"IELTS_Feedback_{now}.docx"
+                    output_doc = BytesIO()
+                    save_feedback_to_docx(feedback_text, output_doc, task_type, band_scores, original_text=text)
+                    output_doc.seek(0)
 
-            st.success("🎉 评分与反馈生成完成！")
-            st.download_button("📥 下载反馈报告", output_doc, file_name=filename)
+                    now = datetime.now().strftime("%Y%m%d_%H%M")
+                    filename = f"反馈_{uploaded_file.name.replace('.txt','').replace('.docx','')}_{now}.docx"
+
+                    st.success(f"✅ {uploaded_file.name} 处理完成")
+                    st.download_button("📥 下载反馈报告", output_doc, file_name=filename, key=f"download_{idx}")
+
 #cd "D:\Python\Code\EduTech\streamlit_wrt_app"   
 #streamlit run streamlit_wrt_app.py
